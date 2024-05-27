@@ -25,4 +25,9 @@ const productos = [{
 {
     'alimento': 'pavo',
     'cantidad': 0
-}]
+}];
+
+const pedirCesta = ()=> {
+    const cesta = JSON.parse(localStorage.getItem("cesta")) || 'La cesta está vacía.';
+    return cesta;
+}
