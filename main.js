@@ -47,7 +47,6 @@ const limpiarTodo = () => {
     console.log(productos);
     cesta = productos.filter(({ cantidad }) => cantidad > 0);
     localStorage.clear();
-    cesta = pedirCesta();
     pintarCarrito(cesta);
 };
 
@@ -56,6 +55,8 @@ const añadirProducto = (producto1) => {
         if (productos[i].alimento == producto1) {
             productos[i].cantidad += 1;
             cesta = productos.filter(({ cantidad }) => cantidad > 0);
+            let cestaString = JSON.stringify(cesta)
+            localStorage.setItem("cesta", cestaString);
             pintarCarrito(cesta);
         };
 
@@ -66,24 +67,22 @@ const eliminarProducto = (producto1) => {
         if (productos[i].alimento == producto1) {
             productos[i].cantidad -= 1;
             cesta = productos.filter(({ cantidad }) => cantidad > 0);
+            let cestaString = JSON.stringify(cesta)
+            localStorage.setItem("cesta", cestaString);
             pintarCarrito(cesta);
         };
 
 };
 
-const pedirCesta = () => {
-    let cesta = JSON.parse(localStorage.getItem("cesta")) || [];
-    return cesta;
-};
-
-const pintarCarrito = (listaProductos) => {
+const pintarCarrito = () => {
+    cesta = JSON.parse(localStorage.getItem("cesta")) || [];
     listaCarrito.innerHTML = '';
     if (cesta.length == 0) {
         let cestaVacia = document.createElement('p');
         cestaVacia.innerHTML = 'La cesta está vacía.';
         listaCarrito.append(cestaVacia);
     } else {
-        listaProductos.forEach(({ alimento, cantidad }) => {
+        cesta.forEach(({ alimento, cantidad }) => {
             const label = document.createElement('label');
             const input = document.createElement('input');
             label.setAttribute('for', alimento);
@@ -98,6 +97,4 @@ const pintarCarrito = (listaProductos) => {
     };
 };
 
-pedirCesta();
 pintarCarrito(cesta);
-console.log(cesta)
